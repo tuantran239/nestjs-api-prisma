@@ -12,6 +12,9 @@ export type I18nTranslations = {
             "username_email_not_match": string;
             "password_not_match": string;
         };
+        "user": {
+            "not_found": string;
+        };
     };
 };
 /* prettier-ignore */

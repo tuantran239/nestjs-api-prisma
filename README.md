@@ -28,11 +28,8 @@ $ yarn run start:prod
 
 
 ```bash
-#generate migration
-$ yarn migration:generate -- db/migrations/create-table-demo
-
-#run migration
-$ yarn migration:run
+#migrate
+$ yarn migrate --name example
 ```
 
 ## Test

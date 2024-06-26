@@ -6,8 +6,8 @@ CREATE TABLE "user" (
     "password" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
     "roleId" TEXT NOT NULL,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")

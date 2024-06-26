@@ -4,5 +4,8 @@
     "username_exists": "Tên người dùng đã tồn tại, vui lòng thử lại tên người dùng khác.",
     "username_email_not_match": "Tên người dùng hoặc email không đúng, vui lòng thử lại.",
     "password_not_match": "Mật khẩu không đúng, vui lòng thử lại."
+  },
+  "user": {
+    "not_found": "Không tìm thấy người dùng, hãy thử lại."
   }
 }

@@ -1,10 +1,11 @@
 import { PrismaService } from 'src/prisma/prisma.service';
-
-export abstract class BaseRepository<PD, RA, E, C, U, Q, R> {
+export abstract class BaseRepository<PD, E, C, U, R> {
   constructor(
-    private prismaService: PrismaService,
+    protected prismaService: PrismaService,
     private model: string,
-  ) {}
+  ) {
+    this.model = model;
+  }
 
   getDelegate() {
     const delegate = this.prismaService[this.model];
@@ -18,15 +19,9 @@ export abstract class BaseRepository<PD, RA, E, C, U, Q, R> {
 
   abstract create(payload: C): Promise<E>;
 
-  abstract list(payload: Q): Promise<R[]>;
-
-  abstract update(payload: U): Promise<E>;
-
-  abstract retrieve(args: RA): Promise<R>;
+  abstract update(id: string, payload: U): Promise<E>;
 
   abstract remove(id: string): Promise<E>;
-
-  abstract delete(id: string): Promise<E>;
 
   abstract mapToResponse(model: E): R;
 }

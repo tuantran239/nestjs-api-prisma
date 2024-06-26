@@ -14,8 +14,8 @@ model User {
   password    String
   phoneNumber String   @map("phone_number")
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  deletedAt   DateTime @map("deleted_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
   role        Role     @relation(fields: [roleId], references: [id])
   roleId      String
 

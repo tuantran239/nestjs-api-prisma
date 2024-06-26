@@ -4,5 +4,8 @@
     "username_exists": "Username already exist, please try another username.",
     "username_email_not_match": "Username or email not match, please try another.",
     "password_not_match": "Password not match, please try another."
+  },
+  "user": {
+    "not_found": "User not found, please try another"
   }
 }
