@@ -6,6 +6,10 @@ import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
     "errors": {
+        "common": {
+            "method_not_allow": string;
+            "not_found": string;
+        };
         "auth": {
             "email_exists": string;
             "username_exists": string;

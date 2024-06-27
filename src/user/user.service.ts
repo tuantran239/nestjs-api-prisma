@@ -1,67 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { BaseService } from 'src/common/service/base.service';
-import {
-  DataSource,
-  DeleteResult,
-  EntityManager,
-  FindManyOptions,
-  FindOneOptions,
-} from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ListUserQueryDto } from './dto/list-user-query.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserResponseDto } from './dto/user-response.dto';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import { I18nCustomService } from 'src/i18n-custom/i18n-custom.service';
 
 @Injectable()
 export class UserService extends BaseService<
+  Prisma.UserDelegate<DefaultArgs>,
   User,
   CreateUserDto,
-  UpdateUserDto
+  UpdateUserDto,
+  UserResponseDto,
+  Prisma.UserFindManyArgs,
+  Prisma.UserCountArgs,
+  Prisma.UserFindUniqueArgs,
+  ListUserQueryDto,
+  UserRepository
 > {
-  protected manager: EntityManager;
-
   constructor(
-    private dataSource: DataSource,
-    @InjectRepository(User) private readonly userRepository: UserRepository,
+    protected userRepository: UserRepository,
+    protected i18n: I18nCustomService,
   ) {
-    super();
-    this.manager = this.dataSource.manager;
+    super(userRepository, i18n);
   }
 
-  async create(payload: CreateUserDto): Promise<User> {
-    return this.userRepository.createUser(payload);
-  }
-
-  async update(id: string, payload: UpdateUserDto): Promise<User> {
-    return this.userRepository.updateUser({ ...payload, id });
-  }
-
-  async delete(id: string): Promise<DeleteResult> {
-    const user = await this.userRepository.findOne({ where: { id } });
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return await this.userRepository.delete({ id });
-  }
-
-  async list(options: FindManyOptions<User>): Promise<User[]> {
-    return this.userRepository.find(options);
-  }
-
-  async listAndCount(
-    options: FindManyOptions<User>,
-  ): Promise<[User[], number]> {
-    return this.userRepository.findAndCount(options);
-  }
-
-  async retrieveById(id: string): Promise<User> {
-    return this.userRepository.findOne({ where: { id } });
-  }
-
-  retrieveOne(options: FindOneOptions<User>): Promise<User> {
-    return this.userRepository.findOne(options);
+  listByQuery(q: ListUserQueryDto): Promise<User> {
+    throw new Error('Method not implemented.');
   }
 }

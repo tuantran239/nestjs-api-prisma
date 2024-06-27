@@ -1,21 +1,56 @@
-import {
-  DeleteResult,
-  EntityManager,
-  FindManyOptions,
-  FindOneOptions,
-} from 'typeorm';
+import { I18nCustomService } from 'src/i18n-custom/i18n-custom.service';
+import { BaseRepository } from '../repository/base.repository';
+import { Injectable } from '@nestjs/common';
 
-export abstract class BaseService<E, C, U> {
-  protected abstract manager: EntityManager;
-  constructor() {}
+@Injectable()
+export abstract class BaseService<
+  PD,
+  E,
+  C,
+  U,
+  R,
+  LA,
+  CA,
+  RA,
+  Q,
+  CR extends BaseRepository<PD, E, C, U, R, LA, CA, RA>,
+> {
+  constructor(
+    protected repository: CR,
+    protected i18n: I18nCustomService,
+    private isDeleteRecord = false,
+  ) {
+    this.isDeleteRecord = isDeleteRecord;
+  }
 
-  abstract create(payload: C): Promise<E>;
+  async create(payload: C): Promise<E> {
+    return this.repository.create(payload);
+  }
 
-  abstract update(id: string, payload: U): Promise<E>;
+  async update(id: string, payload: U): Promise<E> {
+    return await this.repository.update(id, payload);
+  }
 
-  abstract delete(id: string): Promise<DeleteResult>;
+  async list(args: LA, countArgs: CA) {
+    return await this.repository.list(args, countArgs)
+  }
 
-  abstract list(options: FindManyOptions<E>): Promise<E[]>;
+  async retrieve(args: RA) {
+    return this.repository.retrieve(args)
+  }
 
-  abstract retrieve(options: FindOneOptions<E>): Promise<E>;
+  async remove(id: string) {
+    return await this.repository.remove(id)
+  }
+
+  async delete(id: string) {
+
+    if(!this.isDeleteRecord) {
+      throw new Error(this.i18n.getMessage('errors.common.method_not_allow'))
+    }
+
+    return await this.repository.delete(id)
+  }
+
+  abstract listByQuery(q: Q): Promise<E>;
 }

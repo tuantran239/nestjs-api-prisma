@@ -18,13 +18,16 @@ export class UserRepository extends BaseRepository<
   User,
   CreateUserDto,
   UpdateUserDto,
-  UserResponseDto
+  UserResponseDto,
+  Prisma.UserFindManyArgs,
+  Prisma.UserCountArgs,
+  Prisma.UserFindUniqueArgs
 > {
   constructor(
     prismaService: PrismaService,
     private i18n: I18nCustomService,
   ) {
-    super(prismaService, PrismaDelegate.user);
+    super(prismaService, PrismaDelegate.user, 'User');
   }
 
   async create(payload: CreateUserDto): Promise<User> {
@@ -41,28 +44,87 @@ export class UserRepository extends BaseRepository<
   async update(id: string, payload: UpdateUserDto): Promise<User> {
     const userDelegate = this.getDelegate();
 
-    const user = await userDelegate.findUnique({
-      where: { id },
-      include: { role: true },
-    });
+    await this.findByOrThrow<Prisma.UserInclude>(
+      id,
+      'id',
+      null,
+      this.i18n.getMessage('errors.user.not_found'),
+    );
 
-    if (!user) {
-      this.i18n.getMessage('errors.user.not_found');
+    if (payload.password) {
+      payload.password = await hashPassword(payload.password);
     }
 
-    await userDelegate.update({ where: { id }, data: { ...payload } });
+    await userDelegate.update({
+      where: { id },
+      data: { ...payload, updatedAt: new Date() },
+    });
 
-    return await userDelegate.findUnique({
+    return (await userDelegate.findUnique({
       where: { id },
       include: { role: true },
-    });
+    })) as User;
   }
 
-  remove(id: string): Promise<User> {
-    throw new Error('Method not implemented.');
+  async remove(id: string): Promise<User> {
+    const userDelegate = this.getDelegate();
+
+    await this.findByOrThrow<Prisma.UserInclude>(
+      id,
+      'id',
+      null,
+      this.i18n.getMessage('errors.user.not_found'),
+    );
+
+    await userDelegate.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+
+    return (await userDelegate.findUnique({
+      where: { id },
+      include: { role: true },
+    })) as User;
+  }
+
+  async delete(id: string): Promise<User> {
+    const userDelegate = this.getDelegate();
+
+    const user = await this.findByOrThrow<Prisma.UserInclude>(
+      id,
+      'id',
+      null,
+      this.i18n.getMessage('errors.user.not_found'),
+    );
+
+    await userDelegate.delete({ where: { id } });
+
+    return user;
+  }
+
+  async list(
+    args: Prisma.UserFindManyArgs<DefaultArgs>,
+    countArgs: Prisma.UserCountArgs
+  ): Promise<{ results: User[]; total: number }> {
+    const userDelegate = this.getDelegate();
+
+    const users = await userDelegate.findMany(args);
+    const total = await userDelegate.count(countArgs);
+
+    const results = users.map((user) => this.mapToResponse(user));
+
+    return { results, total }
+  }
+
+  async retrieve(args: Prisma.UserFindUniqueArgs<DefaultArgs>): Promise<User> {
+    const userDelegate = this.getDelegate()
+
+    const result = await userDelegate.findUnique(args)
+
+    return this.mapToResponse(result)
   }
 
   mapToResponse(model: User): UserResponseDto {
-    throw new Error('Method not implemented.');
+    return model;
   }
 }

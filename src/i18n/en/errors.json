@@ -1,4 +1,8 @@
 {
+  "common": {
+    "method_not_allow": "Method not allow",
+    "not_found": "{record} not found"
+  },
   "auth": {
     "email_exists": "Email already exist, please try another email.",
     "username_exists": "Username already exist, please try another username.",

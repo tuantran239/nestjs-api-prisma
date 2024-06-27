@@ -1,4 +1,8 @@
 {
+  "common": {
+    "method_not_allow": "Phuong thuc chua ho tro",
+    "not_found": "{record} khong tim thay"
+  },
   "auth": {
     "email_exists": "Email này đã tồn tại, vui lòng thử lại với email khác.",
     "username_exists": "Tên người dùng đã tồn tại, vui lòng thử lại tên người dùng khác.",
