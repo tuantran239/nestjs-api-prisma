@@ -31,8 +31,8 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   const config = new DocumentBuilder()
-    .setTitle('100ty example')
-    .setDescription('The 100ty API description')
+    .setTitle('App example')
+    .setDescription('The app API description')
     .setVersion('1.0')
     .addTag('auth')
     .build();

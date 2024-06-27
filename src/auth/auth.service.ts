@@ -19,8 +19,13 @@ export class AuthService {
   async login(payload: LoginDto): Promise<User> {
     const { username, password } = payload;
 
-    const user = await this.userService.retrieveOne({
-      where: [{ email: username }, { username }],
+    const user = await this.userService.retrieve({
+      where: {
+        OR: [
+          { username: { equals: username } },
+          { email: { equals: username } },
+        ],
+      },
     });
 
     if (!user) {
@@ -47,7 +52,7 @@ export class AuthService {
   async register(payload: CreateUserDto): Promise<User> {
     const { username, password, email } = payload;
 
-    const userEmail = await this.userService.retrieveOne({ where: { email } });
+    const userEmail = await this.userService.retrieve({ where: { email } });
 
     if (userEmail) {
       throw new BadRequestException(
@@ -57,7 +62,7 @@ export class AuthService {
       );
     }
 
-    const userUsername = await this.userService.retrieveOne({
+    const userUsername = await this.userService.retrieve({
       where: { username },
     });
 
@@ -68,12 +73,6 @@ export class AuthService {
         }),
       );
     }
-
-    const salt = await bcrypt.genSalt();
-
-    const hashPassword = await bcrypt.hash(password, salt);
-
-    payload.password = hashPassword;
 
     const newUser = await this.userService.create(payload);
 

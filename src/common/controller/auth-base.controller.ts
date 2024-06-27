@@ -24,8 +24,8 @@ export class AuthBaseController<
   S extends BaseService<PD, E, C, U, R, LA, CA, RA, Q, CR>,
 > {
   constructor(
-    protected service: S,
-    protected repository: CR,
+    private service: S,
+    private repository: CR,
     private readonly _i18n: I18nCustomService,
     private readonly dto: {
       CreateDto: C;

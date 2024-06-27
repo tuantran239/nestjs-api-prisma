@@ -13,7 +13,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import IConfig, { JWTConfig } from 'src/common/config/config.interface';
 import { COOKIE_AUTH_TOKEN } from 'src/common/constant/cookie';
-import RouterUrl from 'src/common/constant/router';
 import { ResponseData } from 'src/common/interface';
 import { BodyValidationPipe } from 'src/common/pipe/body-validation.pipe';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -21,9 +20,10 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthRouter } from './auth.router';
 
 @ApiTags('auth')
-@Controller(RouterUrl.AUTH.ROOT)
+@Controller(AuthRouter.ROOT)
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -31,7 +31,7 @@ export class AuthController {
     private configService: ConfigService<IConfig>,
   ) {}
 
-  @Post(RouterUrl.AUTH.LOGIN)
+  @Post(AuthRouter.LOGIN)
   async login(
     @Body(new BodyValidationPipe()) payload: LoginDto,
     @Res() res: Response,
@@ -59,7 +59,7 @@ export class AuthController {
     }
   }
 
-  @Post(RouterUrl.AUTH.REGISTER)
+  @Post(AuthRouter.REGISTER)
   async register(
     @Body(new BodyValidationPipe()) payload: CreateUserDto,
     @Res() res: Response,
@@ -88,7 +88,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(RouterUrl.AUTH.ME)
+  @Get(AuthRouter.ME)
   async me(@Res() res: Response, @Request() req) {
     try {
       const responseData: ResponseData = {
@@ -105,7 +105,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post(RouterUrl.AUTH.LOGOUT)
+  @Post(AuthRouter.LOGOUT)
   async logout(@Res() res: Response, @Request() req) {
     try {
       res.clearCookie(COOKIE_AUTH_TOKEN);

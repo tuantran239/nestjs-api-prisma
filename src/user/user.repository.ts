@@ -21,7 +21,7 @@ export class UserRepository extends BaseRepository<
   UserResponseDto,
   Prisma.UserFindManyArgs,
   Prisma.UserCountArgs,
-  Prisma.UserFindUniqueArgs
+  Prisma.UserFindFirstArgs
 > {
   constructor(
     prismaService: PrismaService,
@@ -32,6 +32,8 @@ export class UserRepository extends BaseRepository<
 
   async create(payload: CreateUserDto): Promise<User> {
     payload.password = await hashPassword(payload.password);
+
+    console.log(payload)
 
     return await this.getDelegate().create({
       data: {
@@ -116,10 +118,10 @@ export class UserRepository extends BaseRepository<
     return { results, total }
   }
 
-  async retrieve(args: Prisma.UserFindUniqueArgs<DefaultArgs>): Promise<User> {
+  async retrieve(args: Prisma.UserFindFirstArgs<DefaultArgs>): Promise<User> {
     const userDelegate = this.getDelegate()
 
-    const result = await userDelegate.findUnique(args)
+    const result = await userDelegate.findFirst(args)
 
     return this.mapToResponse(result)
   }

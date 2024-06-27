@@ -10,7 +10,10 @@ import { AuthBaseController } from 'src/common/controller/auth-base.controller';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { I18nCustomService } from 'src/i18n-custom/i18n-custom.service';
 import { RoleCode } from 'src/role/role.type';
+import { Controller } from '@nestjs/common';
+import { UserRouter } from './user.router';
 
+@Controller(UserRouter.ROOT)
 export class UserController extends AuthBaseController<
   Prisma.UserDelegate<DefaultArgs>,
   User,
@@ -19,7 +22,7 @@ export class UserController extends AuthBaseController<
   UserResponseDto,
   Prisma.UserFindManyArgs,
   Prisma.UserCountArgs,
-  Prisma.UserFindUniqueArgs,
+  Prisma.UserFindFirstArgs,
   ListUserQueryDto,
   UserRepository,
   UserService

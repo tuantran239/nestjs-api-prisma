@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
-import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserRepository } from './user.repository';
+import { I18nCustomModule } from 'src/i18n-custom/i18n-custom.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [I18nCustomModule],
   controllers: [UserController],
   providers: [UserService, UserRepository],
   exports: [UserService],

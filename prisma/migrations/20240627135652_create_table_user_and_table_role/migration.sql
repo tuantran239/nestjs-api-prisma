@@ -19,14 +19,17 @@ CREATE TABLE "role" (
     "name" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "role_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "role_name_key" ON "role"("name");

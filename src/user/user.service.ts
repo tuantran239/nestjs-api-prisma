@@ -19,7 +19,7 @@ export class UserService extends BaseService<
   UserResponseDto,
   Prisma.UserFindManyArgs,
   Prisma.UserCountArgs,
-  Prisma.UserFindUniqueArgs,
+  Prisma.UserFindFirstArgs,
   ListUserQueryDto,
   UserRepository
 > {

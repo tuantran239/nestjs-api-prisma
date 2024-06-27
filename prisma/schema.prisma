@@ -10,7 +10,7 @@ datasource db {
 model User {
   id          String   @id
   email       String   @unique
-  username    String
+  username    String   @unique
   password    String
   phoneNumber String   @map("phone_number")
   createdAt   DateTime @default(now()) @map("created_at")
@@ -27,8 +27,8 @@ model Role {
   name      String   @unique
   code      String
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  deletedAt DateTime @map("deleted_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
   users     User[]
 
   @@map("role")
